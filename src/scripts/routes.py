@@ -2,7 +2,7 @@
 
 from flask import Blueprint
 from src.scripts import logs
-from src.scripts.pokemon.routes import servicio_1_blueprint
+from src.scripts.servicio1.routes import servicio_1_blueprint
 
 base_blueprint = Blueprint("base_blueprint", __name__)
 
