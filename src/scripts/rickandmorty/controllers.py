@@ -10,8 +10,7 @@ from .queries import Query
 #---------------TABLA PERSONAJES--------------------------------
 def obtener_tabla_personajes():
     try:
-        nombre_tabla = "public.tabla_personajes"
-        results = Query().buscar_tabla(nombre_tabla)
+        results = Query().buscar_tabla_personajes()
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -94,8 +93,7 @@ def cru_tabla_personajes():
 #--------------TABLA ESPECIES---------------------------------
 def obtener_tabla_especies():
     try:
-        nombre_tabla = "public.tabla_especies"
-        results = Query().buscar_tabla(nombre_tabla)
+        results = Query().buscar_tabla_especies()
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",

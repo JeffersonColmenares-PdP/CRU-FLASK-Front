@@ -11,7 +11,7 @@ from .queries import Query
 def obtener_tabla_pais_espanol():
     try:
         
-        results = Query().buscar_tabla_pais_espanol
+        results = Query().buscar_tabla_pais_espanol()
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -94,8 +94,9 @@ def cru_tabla_pais_espanol():
 #----------------TABLA TRADUCCIONES -------------------------------
 def obtener_tabla_nombre_pais_traducciones():
     try:
-        nombre_tabla = "public.tabla_nombre_pais_traducciones"
-        results = Query().buscar_tabla_nombre_pais_traducciones
+        
+        results = Query().buscar_tabla_nombre_pais_traducciones()
+
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -178,8 +179,7 @@ def cru_tabla_nombre_pais_traducciones():
 #--------------TABLA FRONTERAS ---------------------------------
 def obtener_tabla_fronteras():
     try:
-        nombre_tabla = "public.tabla_fronteras"
-        results = Query().buscar_tabla_fronteras
+        results = Query().buscar_tabla_fronteras()
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -203,8 +203,7 @@ def agregar_fronteras():
     except Exception as exc:
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
-    try:
-       
+    try:       
         Query().agregar_fronteras(entrada)
     except psycopg2.Error as db_error:
         return {
@@ -317,3 +316,4 @@ def cru_union_pais_fronteras():
         return obtener_union_pais_fronteras()
     if request.method == "POST":
         return agregar_pais_frontera()
+
