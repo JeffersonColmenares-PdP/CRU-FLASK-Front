@@ -10,8 +10,8 @@ from .queries import Query
 #-----------------TABLA PAISES ------------------------------
 def obtener_tabla_pais_espanol():
     try:
-        nombre_tabla = "public.tabla_pais_espanol"
-        results = Query().buscar_tabla(nombre_tabla)
+        
+        results = Query().buscar_tabla_pais_espanol
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -104,7 +104,7 @@ def cru_tabla_pais_espanol():
 def obtener_tabla_nombre_pais_traducciones():
     try:
         nombre_tabla = "public.tabla_nombre_pais_traducciones"
-        results = Query().buscar_tabla(nombre_tabla)
+        results = Query().buscar_tabla_nombre_pais_traducciones
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -197,7 +197,7 @@ def cru_tabla_nombre_pais_traducciones():
 def obtener_tabla_fronteras():
     try:
         nombre_tabla = "public.tabla_fronteras"
-        results = Query().buscar_tabla(nombre_tabla)
+        results = Query().buscar_tabla_fronteras
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -286,57 +286,12 @@ def cru_tabla_fronteras():
     if request.method == "PUT":
         return actualizar_tabla_fronteras()
 
-#---------------TABLA UNION PAISES - PERSONAJES--------------------------------
-def obtener_union_pais_personaje():
-    try:
-        results = Query().buscar_union_pais_personaje()
-    except psycopg2.Error as db_error:
-        return {
-            "msg": f"DB error: {str(db_error)}",
-            "codigo": 0,
-            "status": False,
-            "obj": {},
-        }
-    except Exception as exc:
-        return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
 
-    return {
-        "msg": "Consulta satisfactoria",
-        "codigo": 0,
-        "status": True,
-        "obj": results,
-    }
-
-def agregar_pais_personaje():
-    try:
-        entrada = request.json
-    except Exception as exc:
-        return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
-    
-    try:
-        Query().insertar_personaje_pais(entrada.get("nombre_paises"), entrada.get("nombre_personaje"))
-    except psycopg2.Error as db_error:
-        return {
-            "msg": f"DB error: {str(db_error)}",
-            "codigo": 0,
-            "status": False,
-            "obj": {},
-        }
-    except Exception as exc:
-        return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
-
-    return {
-        "msg": "Se agrego satisfactoriamente",
-        "codigo": 0,
-        "status": True,
-        "obj": {},
-    }
-
-def cru_union_pais_personaje():
     if request.method == "GET":
-        return obtener_union_pais_personaje()
+        return obtener_union_pais_fronteras()
     if request.method == "POST":
-        return agregar_pais_personaje()
+        return agregar_pais_frontera()
+    
 
 #----------------TABLA UNION PAISES FRONTERAS -------------------------------
 def obtener_union_pais_fronteras():

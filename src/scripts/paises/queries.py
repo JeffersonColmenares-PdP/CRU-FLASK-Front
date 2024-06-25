@@ -6,13 +6,13 @@ from src.scripts.connection import Connection
 class Query(Connection):
     """ > The Query class is a subclass of the Connection class """
 
-    def buscar_tabla(self, nombre_tabla: str):
+    def buscar_tabla_pais_espanol(self):
         """
         It does nothing.
         """
 
-        query = f"""
-            SELECT * FROM {nombre_tabla}
+        query = """
+            SELECT * FROM tabla_pais_espanol
         """
 
         # contextos de python
@@ -42,16 +42,49 @@ class Query(Connection):
 
                 return objeto_pais_espanol
 
-    def buscar_union_pais_personaje(self):
+    def buscar_tabla_nombre_pais_traducciones(self):
         """
         It does nothing.
         """
 
         query = """
-            SELECT p.nombre_paises, pj.nombre_personaje
-            FROM union_pais_personaje AS u
-            JOIN tabla_pais_espanol AS p ON u.fk_pais = p.id_paises
-            JOIN tabla_personajes AS pj ON u.fk_personaje = pj.id_personaje;
+            SELECT * FROM tabla_nombre_pais_traducciones
+        """
+
+        # contextos de python
+        with self._open_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query)
+
+                response = cursor.fetchall()
+
+                print(response)
+                print(cursor.description)
+
+                columnas = [columna.name for columna in cursor.description or []]
+
+                # objeto_pk = []
+                # for tupla in response:
+                #     obj = {}
+                #     for index, item in enumerate(tupla):
+                #         obj[columnas[index]] = item
+                #     objeto_pk.append(obj)
+                objeto_pais_espanol = [
+                    {columnas[index]: item for index, item in enumerate(tupla)}
+                    for tupla in response
+                ]
+
+                print(objeto_pais_espanol)
+
+                return objeto_pais_espanol
+
+    def buscar_tabla_fronteras(self):
+        """
+        It does nothing.
+        """
+
+        query = """
+            SELECT * FROM tabla_fronteras
         """
 
         # contextos de python
@@ -119,6 +152,7 @@ class Query(Connection):
                 print(objeto_pais_espanol)
 
                 return objeto_pais_espanol
+
 
     def agregar_datos(self, query: str):
         
@@ -220,6 +254,7 @@ class Query(Connection):
             with conn.cursor() as cursor:
                 print(cursor.mogrify(query).decode())
                 cursor.execute(query)
+
 
     def actualizar_datos(self, query: str):
         

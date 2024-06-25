@@ -32,26 +32,6 @@ servicio_2_blueprint.add_url_rule(
     methods=["GET", "POST", "PUT"]
 )
 
-#---------------TABLA PERSONAJES--------------------------------
-servicio_2_blueprint.add_url_rule(
-    "/personajes",
-    view_func=controllers.cru_tabla_personajes,
-    methods=["GET", "POST", "PUT"]
-)
-
-#--------------TABLA ESPECIES---------------------------------
-servicio_2_blueprint.add_url_rule(
-    "/especies",
-    view_func=controllers.cru_tabla_especies,
-    methods=["GET", "POST", "PUT"]
-)
-
-#---------------TABLA UNION PAISES - PERSONAJES--------------------------------
-servicio_2_blueprint.add_url_rule(
-    "/union-pais-personaje",
-    view_func=controllers.cru_union_pais_personaje,
-    methods=["GET", "POST"]
-)
 
 #----------------TABLA UNION PAISES FRONTERAS -------------------------------
 servicio_2_blueprint.add_url_rule(
