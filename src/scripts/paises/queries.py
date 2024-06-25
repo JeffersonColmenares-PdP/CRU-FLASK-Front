@@ -154,55 +154,34 @@ class Query(Connection):
                 return objeto_pais_espanol
 
 
-    def agregar_datos(self, query: str):
-        
+    def agregar_pais_espanol(self, entrada: dict):
+        query = f"""
+            INSERT INTO public.tabla_pais_espanol
+            (id_paises, nombre_paises, capital, area_km, continente, poblacion)
+            VALUES ({entrada.get('id_paises')}, '{entrada.get('nombre_paises')}', '{entrada.get('capital')}', {entrada.get('area_km')}, '{entrada.get('continente')}', {entrada.get('poblacion')});
+        """
         with self._open_connection() as conn:
             with conn.cursor() as cursor:
                 print(cursor.mogrify(query).decode())
                 cursor.execute(query)
 
-    def insertar_personaje_pais(self, nombre_paises: str, nombre_personaje: str):
-        #Consulta tabla_pais_espanol por nombre para traer id_paises
+    def agregar_pais_traducciones(self, entrada: dict):
         query = f"""
-            SELECT id_paises
-            FROM tabla_pais_espanol
-            WHERE nombre_paises = '{nombre_paises}'
-            """
+            INSERT INTO public.tabla_nombre_pais_traducciones
+            (id_traduccion, nombre_idioma, traduccion_oficial, traduccion_comun, fk_pais)
+            VALUES ({entrada.get('id_traduccion')}, '{entrada.get('nombre_idioma')}', '{entrada.get('traduccion_oficial')}', '{entrada.get('traduccion_comun')}', '{entrada.get('fk_pais')}');
+        """
         with self._open_connection() as conn:
             with conn.cursor() as cursor:
                 print(cursor.mogrify(query).decode())
                 cursor.execute(query)
-                response = cursor.fetchall()
-                columnas = [columna.name for columna in cursor.description or []]
-                objeto_pais_espanol = [
-                    {columnas[index]: item for index, item in enumerate(tupla)}
-                    for tupla in response
-                ]
-                id_paises = objeto_pais_espanol[0].get("id_paises")
-        #Consulta tabla_personajes por nombre para traer id_personaje
+
+    def agregar_fronteras(self, entrada: dict):
         query = f"""
-            SELECT id_personaje
-            FROM tabla_personajes
-            WHERE nombre_personaje = '{nombre_personaje}'
+            INSERT INTO public.tabla_fronteras
+            (id_frontera, nombre_frontera, longitud_frontera, descripcion_frontera, tipo_frontera)
+            VALUES ({entrada.get('id_frontera')}, '{entrada.get('nombre_frontera')}', '{entrada.get('longitud_frontera')}', '{entrada.get('descripcion_frontera')}', '{entrada.get('tipo_frontera')}');
             """
-        with self._open_connection() as conn:
-            with conn.cursor() as cursor:
-                print(cursor.mogrify(query).decode())
-                cursor.execute(query)
-                response = cursor.fetchall()
-                columnas = [columna.name for columna in cursor.description or []]
-                objeto_pais_espanol = [
-                    {columnas[index]: item for index, item in enumerate(tupla)}
-                    for tupla in response
-                ]
-                id_personaje = objeto_pais_espanol[0].get("id_personaje")
-        #Consulta union_pais_personaje el id_paises y id_personaje
-        query = f"""
-            INSERT INTO public.union_pais_personaje
-            (fk_pais, fk_personaje)
-            VALUES ({id_paises}, {id_personaje});
-            """
-        
         with self._open_connection() as conn:
             with conn.cursor() as cursor:
                 print(cursor.mogrify(query).decode())

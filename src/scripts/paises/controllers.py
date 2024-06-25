@@ -36,12 +36,8 @@ def agregar_pais_espanol():
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        query = f"""
-            INSERT INTO public.tabla_pais_espanol
-            (id_paises, nombre_paises, capital, area_km, continente, poblacion)
-            VALUES ({entrada.get('id_paises')}, '{entrada.get('nombre_paises')}', '{entrada.get('capital')}', {entrada.get('area_km')}, '{entrada.get('continente')}', {entrada.get('poblacion')});
-        """
-        Query().agregar_datos(query)
+        
+        Query().agregar_pais_espanol(entrada)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -129,12 +125,8 @@ def agregar_pais_traducciones():
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        query = f"""
-            INSERT INTO public.tabla_nombre_pais_traducciones
-            (id_traduccion, nombre_idioma, traduccion_oficial, traduccion_comun, fk_pais)
-            VALUES ({entrada.get('id_traduccion')}, '{entrada.get('nombre_idioma')}', '{entrada.get('traduccion_oficial')}', '{entrada.get('traduccion_comun')}', '{entrada.get('fk_pais')}');
-        """
-        Query().agregar_datos(query)
+        
+        Query().agregar_pais_traducciones(entrada)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -222,12 +214,8 @@ def agregar_fronteras():
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        query = f"""
-            INSERT INTO public.tabla_fronteras
-            (id_frontera, nombre_frontera, longitud_frontera, descripcion_frontera, tipo_frontera)
-            VALUES ({entrada.get('id_frontera')}, '{entrada.get('nombre_frontera')}', '{entrada.get('longitud_frontera')}', '{entrada.get('descripcion_frontera')}', '{entrada.get('tipo_frontera')}');
-        """
-        Query().agregar_datos(query)
+       
+        Query().agregar_fronteras(entrada)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
