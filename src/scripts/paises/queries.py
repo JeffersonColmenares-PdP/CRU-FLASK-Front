@@ -49,6 +49,7 @@ class Query(Connection):
 
         query = """
             SELECT * FROM tabla_nombre_pais_traducciones
+            JOIN tabla_pais_espanol ON tabla_pais_espanol.id_paises = tabla_nombre_pais_traducciones.fk_pais
         """
 
         # contextos de python
