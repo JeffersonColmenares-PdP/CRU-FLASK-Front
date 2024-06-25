@@ -36,12 +36,8 @@ def agregar_personajes():
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        query = f"""
-            INSERT INTO public.tabla_personajes
-            (id_personaje, nombre_personaje, genero, origen, fk_especie)
-            VALUES ({entrada.get('id_personaje')}, '{entrada.get('nombre_personaje')}', '{entrada.get('genero')}', '{entrada.get('origen')}', '{entrada.get('fk_especie')}');
-        """
-        Query().agregar_datos(query)
+        
+        Query().agregar_personajes(entrada)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -68,13 +64,8 @@ def actualizar_tabla_personajes():
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        for datos in entrada:
-            query = f"""
-                UPDATE public.tabla_personajes
-                SET {datos} = '{entrada[datos]}'
-                WHERE id_personaje = {entrada.get('id_personaje')};
-            """
-            Query().agregar_datos(query)
+        
+            Query().actualizar_tabla_personajes(entrada)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -129,12 +120,8 @@ def agregar_especies():
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        query = f"""
-            INSERT INTO public.tabla_especies
-            (id_especie, nombre_especie, descripcion_especie, fecha_registro, alimentacion)
-            VALUES ({entrada.get('id_especie')}, '{entrada.get('nombre_especie')}', '{entrada.get('descripcion_especie')}', '{entrada.get('fecha_registro')}', '{entrada.get('alimentacion')}');
-        """
-        Query().agregar_datos(query)
+
+        Query().agregar_especies(entrada)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -161,13 +148,8 @@ def actualizar_tabla_especies():
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        for datos in entrada:
-            query = f"""
-                UPDATE public.tabla_especies
-                SET {datos} = '{entrada[datos]}'
-                WHERE id_especie = {entrada.get('id_especie')};
-            """
-            Query().agregar_datos(query)
+        
+            Query().actualizar_tabla_especies(entrada)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",

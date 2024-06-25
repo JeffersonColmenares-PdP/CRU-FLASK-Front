@@ -64,13 +64,8 @@ def actualizar_pais_espanol():
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        for datos in entrada:
-            query = f"""
-                UPDATE public.tabla_pais_espanol
-                SET {datos} = '{entrada[datos]}'
-                WHERE id_paises = {entrada.get('id_paises')};
-            """
-            Query().agregar_datos(query)
+        
+            Query().actualizar_pais_espanol(entrada)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -153,13 +148,8 @@ def actualizar_pais_traducciones():
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        for datos in entrada:
-            query = f"""
-                UPDATE public.tabla_nombre_pais_traducciones
-                SET {datos} = '{entrada[datos]}'
-                WHERE id_traduccion = {entrada.get('id_traduccion')};
-            """
-            Query().agregar_datos(query)
+
+            Query().actualizar_pais_traducciones(entrada)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -242,13 +232,8 @@ def actualizar_tabla_fronteras():
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        for datos in entrada:
-            query = f"""
-                UPDATE public.tabla_fronteras
-                SET {datos} = '{entrada[datos]}'
-                WHERE id_frontera = {entrada.get('id_frontera')};
-            """
-            Query().agregar_datos(query)
+
+            Query().actualizar_tabla_fronteras(entrada)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",

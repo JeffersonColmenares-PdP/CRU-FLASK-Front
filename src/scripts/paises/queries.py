@@ -235,9 +235,47 @@ class Query(Connection):
                 cursor.execute(query)
 
 
-    def actualizar_datos(self, query: str):
+    def actualizar_pais_espanol(self, entrada:dict):
         
-        with self._open_connection() as conn:
-            with conn.cursor() as cursor:
-                print(cursor.mogrify(query).decode())
-                cursor.execute(query)
+        for datos in entrada:
+            query = f"""
+                UPDATE public.tabla_pais_espanol
+                SET {datos} = '{entrada[datos]}'
+                WHERE id_paises = {entrada.get('id_paises')};
+            """
+
+            with self._open_connection() as conn:
+                with conn.cursor() as cursor:
+                    print(cursor.mogrify(query).decode())
+                    cursor.execute(query)
+
+    def actualizar_pais_traducciones(self, entrada:dict):
+        
+        for datos in entrada:
+            query = f"""
+                UPDATE public.tabla_nombre_pais_traducciones
+                SET {datos} = '{entrada[datos]}'
+                WHERE id_traduccion = {entrada.get('id_traduccion')};
+            """
+
+            with self._open_connection() as conn:
+                with conn.cursor() as cursor:
+                    print(cursor.mogrify(query).decode())
+                    cursor.execute(query)
+
+    def actualizar_tabla_fronteras(self, entrada:dict):
+        
+        for datos in entrada:
+            query = f"""
+                UPDATE public.tabla_fronteras
+                SET {datos} = '{entrada[datos]}'
+                WHERE id_frontera = {entrada.get('id_frontera')};
+            """
+
+            with self._open_connection() as conn:
+                with conn.cursor() as cursor:
+                    print(cursor.mogrify(query).decode())
+                    cursor.execute(query)
+
+
+

@@ -118,7 +118,32 @@ class Query(Connection):
                 return objeto_pais_espanol
 
 
-    def agregar_datos(self, query: str):
+    def agregar_personajes(self, entrada: dict):
+        query = f"""
+            INSERT INTO public.tabla_personajes
+            (id_personaje, nombre_personaje, genero, origen, fk_especie)
+            VALUES ({entrada.get('id_personaje')}, '{entrada.get('nombre_personaje')}', '{entrada.get('genero')}', '{entrada.get('origen')}', '{entrada.get('fk_especie')}');
+        """
+        with self._open_connection() as conn:
+            with conn.cursor() as cursor:
+                print(cursor.mogrify(query).decode())
+                cursor.execute(query)
+        
+        with self._open_connection() as conn:
+            with conn.cursor() as cursor:
+                print(cursor.mogrify(query).decode())
+                cursor.execute(query)
+
+    def agregar_especies(self, entrada: dict):
+        query = f"""
+            INSERT INTO public.tabla_especies
+            (id_especie, nombre_especie, descripcion_especie, fecha_registro, alimentacion)
+            VALUES ({entrada.get('id_especie')}, '{entrada.get('nombre_especie')}', '{entrada.get('descripcion_especie')}', '{entrada.get('fecha_registro')}', '{entrada.get('alimentacion')}');
+        """
+        with self._open_connection() as conn:
+            with conn.cursor() as cursor:
+                print(cursor.mogrify(query).decode())
+                cursor.execute(query)
         
         with self._open_connection() as conn:
             with conn.cursor() as cursor:
@@ -173,9 +198,44 @@ class Query(Connection):
                 cursor.execute(query)
 
 
-    def actualizar_datos(self, query: str):
+    def actualizar_tabla_personajes(self, entrada:dict):
+        
+        for datos in entrada:
+            query = f"""
+                UPDATE public.tabla_personajes
+                SET {datos} = '{entrada[datos]}'
+                WHERE id_personaje = {entrada.get('id_personaje')};
+            """
+
+            with self._open_connection() as conn:
+                with conn.cursor() as cursor:
+                    print(cursor.mogrify(query).decode())
+                    cursor.execute(query)
+
         
         with self._open_connection() as conn:
             with conn.cursor() as cursor:
                 print(cursor.mogrify(query).decode())
                 cursor.execute(query)
+
+    def actualizar_tabla_especies(self, entrada:dict):
+        
+        for datos in entrada:
+            query = f"""
+                UPDATE public.tabla_especies
+                SET {datos} = '{entrada[datos]}'
+                WHERE id_especie = {entrada.get('id_especie')};
+            """
+
+            with self._open_connection() as conn:
+                with conn.cursor() as cursor:
+                    print(cursor.mogrify(query).decode())
+                    cursor.execute(query)
+
+        
+        with self._open_connection() as conn:
+            with conn.cursor() as cursor:
+                print(cursor.mogrify(query).decode())
+                cursor.execute(query)
+
+
