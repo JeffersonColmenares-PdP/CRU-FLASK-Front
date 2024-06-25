@@ -1,4 +1,4 @@
-""" rutas del servicio 1 """
+""" rutas del servicio 1=rickandmorty """
 
 from flask import Blueprint
 
