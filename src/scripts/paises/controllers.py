@@ -10,8 +10,10 @@ from .queries import Query
 #-----------------TABLA PAISES ------------------------------
 def obtener_tabla_pais_espanol():
     try:
+        page = request.args.get('page', type=int)
+        page_size = request.args.get('page_size', type=int)
         
-        results = Query().buscar_tabla_pais_espanol()
+        results = Query().buscar_tabla_pais_espanol(page=page, page_size=page_size)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",

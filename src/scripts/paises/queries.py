@@ -6,13 +6,13 @@ from src.scripts.connection import Connection
 class Query(Connection):
     """ > The Query class is a subclass of the Connection class """
 
-    def buscar_tabla_pais_espanol(self):
-        """
-        It does nothing.
-        """
+    def buscar_tabla_pais_espanol(self, page:int, page_size: int):
+        
+        offset = (page - 1) * page_size # filas que no se tienen en cuenta para mostrar
 
-        query = """
-            SELECT * FROM tabla_pais_espanol
+        query = f"""
+            SELECT * FROM tabla_pais_espanol ORDER BY id_paises ASC
+            LIMIT {page_size} OFFSET {offset} 
         """
 
         # contextos de python
@@ -21,6 +21,7 @@ class Query(Connection):
                 cursor.execute(query)
 
                 response = cursor.fetchall()
+                columnas = [columna.name for columna in cursor.description or []]
 
                 print(response)
                 print(cursor.description)
