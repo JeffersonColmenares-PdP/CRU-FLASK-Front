@@ -96,8 +96,10 @@ def cru_tabla_pais_espanol():
 #----------------TABLA TRADUCCIONES -------------------------------
 def obtener_tabla_nombre_pais_traducciones():
     try:
-        
-        results = Query().buscar_tabla_nombre_pais_traducciones()
+        page = request.args.get('page', type=int)
+        page_size = request.args.get('page_size', type=int)
+
+        results = Query().buscar_tabla_nombre_pais_traducciones(page=page, page_size=page_size)
 
     except psycopg2.Error as db_error:
         return {
@@ -181,7 +183,10 @@ def cru_tabla_nombre_pais_traducciones():
 #--------------TABLA FRONTERAS ---------------------------------
 def obtener_tabla_fronteras():
     try:
-        results = Query().buscar_tabla_fronteras()
+        page = request.args.get('page', type=int)
+        page_size = request.args.get('page_size', type=int)
+
+        results = Query().buscar_tabla_fronteras(page=page, page_size=page_size)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -270,7 +275,10 @@ def cru_tabla_fronteras():
 #----------------TABLA UNION PAISES FRONTERAS -------------------------------
 def obtener_union_pais_fronteras():
     try:
-        results = Query().buscar_union_pais_fronteras()
+        page = request.args.get('page', type=int)
+        page_size = request.args.get('page_size', type=int)
+
+        results = Query().buscar_union_pais_fronteras(page=page, page_size=page_size)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",

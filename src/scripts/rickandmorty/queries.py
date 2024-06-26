@@ -6,49 +6,13 @@ from src.scripts.connection import Connection
 class Query(Connection):
     """ > The Query class is a subclass of the Connection class """
 
-    def buscar_tabla_personajes(self):
-        """
-        It does nothing.
-        """
+    def buscar_tabla_personajes(self, page:int, page_size: int):
 
-        query = """
-            SELECT * FROM tabla_personajes
-        """
+        offset = (page - 1) * page_size # filas que no se tienen en cuenta para mostrar
 
-        # contextos de python
-        with self._open_connection() as conn:
-            with conn.cursor() as cursor:
-                cursor.execute(query)
-
-                response = cursor.fetchall()
-
-                print(response)
-                print(cursor.description)
-
-                columnas = [columna.name for columna in cursor.description or []]
-
-                # objeto_pk = []
-                # for tupla in response:
-                #     obj = {}
-                #     for index, item in enumerate(tupla):
-                #         obj[columnas[index]] = item
-                #     objeto_pk.append(obj)
-                objeto_pais_espanol = [
-                    {columnas[index]: item for index, item in enumerate(tupla)}
-                    for tupla in response
-                ]
-
-                print(objeto_pais_espanol)
-
-                return objeto_pais_espanol
-
-    def buscar_tabla_especies(self):
-        """
-        It does nothing.
-        """
-
-        query = """
-            SELECT * FROM tabla_especies
+        query = f"""
+            SELECT * FROM tabla_personajes ORDER BY id_personaje ASC
+            LIMIT {page_size} OFFSET {offset} 
         """
 
         # contextos de python
@@ -78,16 +42,53 @@ class Query(Connection):
 
                 return objeto_pais_espanol
 
-    def buscar_union_pais_personaje(self):
-        """
-        It does nothing.
+    def buscar_tabla_especies(self, page:int, page_size: int):
+
+        offset = (page - 1) * page_size # filas que no se tienen en cuenta para mostrar
+
+        query = f"""
+            SELECT * FROM tabla_especies ORDER BY id_especie ASC
+            LIMIT {page_size} OFFSET {offset} 
         """
 
-        query = """
+        # contextos de python
+        with self._open_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query)
+
+                response = cursor.fetchall()
+
+                print(response)
+                print(cursor.description)
+
+                columnas = [columna.name for columna in cursor.description or []]
+
+                # objeto_pk = []
+                # for tupla in response:
+                #     obj = {}
+                #     for index, item in enumerate(tupla):
+                #         obj[columnas[index]] = item
+                #     objeto_pk.append(obj)
+                objeto_pais_espanol = [
+                    {columnas[index]: item for index, item in enumerate(tupla)}
+                    for tupla in response
+                ]
+
+                print(objeto_pais_espanol)
+
+                return objeto_pais_espanol
+
+    def buscar_union_pais_personaje(self, page:int, page_size: int):
+
+        offset = (page - 1) * page_size # filas que no se tienen en cuenta para mostrar
+
+        query = f"""
             SELECT p.nombre_paises, pj.nombre_personaje
             FROM union_pais_personaje AS u
             JOIN tabla_pais_espanol AS p ON u.fk_pais = p.id_paises
-            JOIN tabla_personajes AS pj ON u.fk_personaje = pj.id_personaje;
+            JOIN tabla_personajes AS pj ON u.fk_personaje = pj.id_personaje
+            ORDER BY pj.nombre_personaje ASC
+            LIMIT {page_size} OFFSET {offset} 
         """
 
         # contextos de python

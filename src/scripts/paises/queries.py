@@ -43,14 +43,15 @@ class Query(Connection):
 
                 return objeto_pais_espanol
 
-    def buscar_tabla_nombre_pais_traducciones(self):
-        """
-        It does nothing.
-        """
+    def buscar_tabla_nombre_pais_traducciones(self, page:int, page_size: int):
 
-        query = """
-            SELECT * FROM tabla_nombre_pais_traducciones
+        offset = (page - 1) * page_size # filas que no se tienen en cuenta para mostrar
+
+        query = f"""
+            SELECT * FROM tabla_nombre_pais_traducciones 
             JOIN tabla_pais_espanol ON tabla_pais_espanol.id_paises = tabla_nombre_pais_traducciones.fk_pais
+            ORDER BY id_traduccion ASC
+            LIMIT {page_size} OFFSET {offset} 
         """
 
         # contextos de python
@@ -80,13 +81,13 @@ class Query(Connection):
 
                 return objeto_pais_espanol
 
-    def buscar_tabla_fronteras(self):
-        """
-        It does nothing.
-        """
+    def buscar_tabla_fronteras(self, page:int, page_size: int):
 
-        query = """
-            SELECT * FROM tabla_fronteras
+        offset = (page - 1) * page_size # filas que no se tienen en cuenta para mostrar
+
+        query = f"""
+            SELECT * FROM tabla_fronteras ORDER BY id_frontera ASC
+            LIMIT {page_size} OFFSET {offset}
         """
 
         # contextos de python
@@ -116,16 +117,17 @@ class Query(Connection):
 
                 return objeto_pais_espanol
 
-    def buscar_union_pais_fronteras(self):
-        """
-        It does nothing.
-        """
+    def buscar_union_pais_fronteras(self, page:int, page_size: int):
 
-        query = """
+        offset = (page - 1) * page_size # filas que no se tienen en cuenta para mostrar
+
+        query = f"""
             SELECT p.nombre_paises, f.nombre_frontera
             FROM union_pais_fronteras AS u
             JOIN tabla_pais_espanol AS p ON u.fk_pais = p.id_paises
-            JOIN tabla_fronteras AS f ON u.fk_frontera = f.id_frontera;
+            JOIN tabla_fronteras AS f ON u.fk_frontera = f.id_frontera
+            ORDER BY p.nombre_paises
+            LIMIT {page_size} OFFSET {offset}
         """
 
         # contextos de python
