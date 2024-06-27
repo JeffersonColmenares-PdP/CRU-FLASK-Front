@@ -39,3 +39,9 @@ servicio_2_blueprint.add_url_rule(
     view_func=controllers.cru_union_pais_fronteras,
     methods=["GET", "POST"]
 )
+
+servicio_2_blueprint.add_url_rule(
+    "/buscar-pais-frontera",
+    view_func=controllers.obtener_buscar_pais_fronteras,
+    methods=["GET"]
+)

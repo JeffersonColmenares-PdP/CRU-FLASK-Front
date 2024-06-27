@@ -264,12 +264,6 @@ def cru_tabla_fronteras():
         return agregar_fronteras()
     if request.method == "PUT":
         return actualizar_tabla_fronteras()
-
-
-    if request.method == "GET":
-        return obtener_union_pais_fronteras()
-    if request.method == "POST":
-        return agregar_pais_frontera()
     
 
 #----------------TABLA UNION PAISES FRONTERAS -------------------------------
@@ -319,6 +313,26 @@ def agregar_pais_frontera():
         "codigo": 0,
         "status": True,
         "obj": {},
+    }
+
+def obtener_buscar_pais_fronteras():
+    try:
+        results = Query().buscar_pais_fronteras()
+    except psycopg2.Error as db_error:
+        return {
+            "msg": f"DB error: {str(db_error)}",
+            "codigo": 0,
+            "status": False,
+            "obj": {},
+        }
+    except Exception as exc:
+        return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
+
+    return {
+        "msg": "Consulta satisfactoria",
+        "codigo": 0,
+        "status": True,
+        "obj": results,
     }
 
 def cru_union_pais_fronteras():

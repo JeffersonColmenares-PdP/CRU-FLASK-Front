@@ -10,6 +10,9 @@ class Query(Connection):
         
         offset = (page - 1) * page_size # filas que no se tienen en cuenta para mostrar
 
+        # Consulta para obtener el número total de registros
+        total_query = "SELECT COUNT(*) FROM tabla_pais_espanol"
+
         query = f"""
             SELECT * FROM tabla_pais_espanol ORDER BY id_paises ASC
             LIMIT {page_size} OFFSET {offset} 
@@ -18,8 +21,10 @@ class Query(Connection):
         # contextos de python
         with self._open_connection() as conn:
             with conn.cursor() as cursor:
+                cursor.execute(total_query)
+                total = cursor.fetchone()[0]
+                
                 cursor.execute(query)
-
                 response = cursor.fetchall()
                 columnas = [columna.name for columna in cursor.description or []]
 
@@ -41,11 +46,18 @@ class Query(Connection):
 
                 print(objeto_pais_espanol)
 
-                return objeto_pais_espanol
+                respuesta = {
+                    "total": total,
+                    "objeto_pais_espanol": objeto_pais_espanol
+                }
+
+                return respuesta
 
     def buscar_tabla_nombre_pais_traducciones(self, page:int, page_size: int):
 
         offset = (page - 1) * page_size # filas que no se tienen en cuenta para mostrar
+        # Consulta para obtener el número total de registros
+        total_query = "SELECT COUNT(*) FROM tabla_nombre_pais_traducciones"
 
         query = f"""
             SELECT * FROM tabla_nombre_pais_traducciones 
@@ -57,8 +69,10 @@ class Query(Connection):
         # contextos de python
         with self._open_connection() as conn:
             with conn.cursor() as cursor:
-                cursor.execute(query)
+                cursor.execute(total_query)
+                total = cursor.fetchone()[0]
 
+                cursor.execute(query)
                 response = cursor.fetchall()
 
                 print(response)
@@ -78,12 +92,19 @@ class Query(Connection):
                 ]
 
                 print(objeto_pais_espanol)
+                respuesta = {
+                    "total": total,
+                    "objeto_pais_espanol": objeto_pais_espanol
+                }
 
-                return objeto_pais_espanol
+                return respuesta
 
     def buscar_tabla_fronteras(self, page:int, page_size: int):
 
         offset = (page - 1) * page_size # filas que no se tienen en cuenta para mostrar
+
+        # Consulta para obtener el número total de registros
+        total_query = "SELECT COUNT(*) FROM tabla_fronteras"
 
         query = f"""
             SELECT * FROM tabla_fronteras ORDER BY id_frontera ASC
@@ -93,8 +114,10 @@ class Query(Connection):
         # contextos de python
         with self._open_connection() as conn:
             with conn.cursor() as cursor:
-                cursor.execute(query)
+                cursor.execute(total_query)
+                total = cursor.fetchone()[0]
 
+                cursor.execute(query)
                 response = cursor.fetchall()
 
                 print(response)
@@ -113,14 +136,20 @@ class Query(Connection):
                     for tupla in response
                 ]
 
-                print(objeto_pais_espanol)
+                respuesta = {
+                    "total": total,
+                    "objeto_pais_espanol": objeto_pais_espanol
+                }
 
-                return objeto_pais_espanol
-
+                return respuesta
+    
     def buscar_union_pais_fronteras(self, page:int, page_size: int):
 
         offset = (page - 1) * page_size # filas que no se tienen en cuenta para mostrar
 
+        # Consulta para obtener el número total de registros
+        total_query = "SELECT COUNT(*) FROM union_pais_fronteras"
+        
         query = f"""
             SELECT p.nombre_paises, f.nombre_frontera
             FROM union_pais_fronteras AS u
@@ -133,8 +162,10 @@ class Query(Connection):
         # contextos de python
         with self._open_connection() as conn:
             with conn.cursor() as cursor:
-                cursor.execute(query)
+                cursor.execute(total_query)
+                total = cursor.fetchone()[0]
 
+                cursor.execute(query)
                 response = cursor.fetchall()
 
                 print(response)
@@ -154,9 +185,49 @@ class Query(Connection):
                 ]
 
                 print(objeto_pais_espanol)
+                respuesta = {
+                    "total": total,
+                    "objeto_pais_espanol": objeto_pais_espanol
+                }
 
-                return objeto_pais_espanol
+                return respuesta
 
+    def buscar_pais_fronteras(self):
+
+        # Consulta para obtener el número total de registros
+        query = f"""
+            SELECT id_frontera, nombre_frontera FROM tabla_fronteras ORDER BY id_frontera ASC
+        """
+
+        query2 = f"""
+            SELECT id_paises, nombre_paises FROM tabla_pais_espanol ORDER BY id_paises ASC
+        """
+
+        # contextos de python
+        with self._open_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query)
+                fronteras = cursor.fetchall()
+                columnas = [columna.name for columna in cursor.description or []]
+                objeto_frontera_espanol = [
+                    {columnas[index]: item for index, item in enumerate(tupla)}
+                    for tupla in fronteras
+                ]
+
+                cursor.execute(query2)
+                paises = cursor.fetchall()
+                columnas = [columna.name for columna in cursor.description or []]
+                objeto_pais_espanol = [
+                    {columnas[index]: item for index, item in enumerate(tupla)}
+                    for tupla in paises
+                ]
+                
+                respuesta = {
+                    "objeto_frontera_espanol": objeto_frontera_espanol,
+                    "objeto_pais_espanol": objeto_pais_espanol
+                }
+
+                return respuesta
 
     def agregar_pais_espanol(self, entrada: dict):
         query = f"""
